@@ -1,0 +1,12 @@
+{
+  "name": "@purge/core",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./mod.ts",
+    "./errors": "./errors.ts"
+  },
+  "imports": {
+    "neverthrow": "npm:neverthrow@^8.2.0"
+  }
+}
+
