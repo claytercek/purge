@@ -1,6 +1,6 @@
 {
   "name": "@purge/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "GPL-3.0-or-later",
   "exports": {
     ".": "./mod.ts",
@@ -10,4 +10,3 @@
     "neverthrow": "npm:neverthrow@^8.2.0"
   }
 }
-

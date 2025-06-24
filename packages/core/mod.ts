@@ -1,7 +1,29 @@
 import type { ResultAsync } from "neverthrow";
 import type { PurgeError } from "./errors.ts";
 
-type PurgeCacheParams = {
+/**
+ * This module provides a CDN agnostic client for purging cache tags and generating CDN specific cache control headers.
+ *
+ * @example
+ * ```ts
+ * import { createPurge } from "@purge/core";
+ * import { MyCDNProvider } from "@purge/my-cdn";
+ * 
+ * const purgeClient = createPurge({
+ *  provider: new MyCDNProvider()
+ * });
+ * 
+ * // Purge cache tags
+ * await purgeClient.purgeCache({ tags: ["tag1", "tag2"] });
+ * 
+ * // Get cache headers for tags
+ * const headers = purgeClient.getCacheHeaders({ tags: ["tag1", "tag2"] });
+ * ```
+ * 
+ * @module
+ */
+
+export type PurgeCacheParams = {
   /**
    * The tags to purge from the CDN.
    * This should be an array of strings representing the tags.
@@ -9,15 +31,7 @@ type PurgeCacheParams = {
   tags: string[];
 };
 
-/**
- * Purge CDN cache by tags.
- *
- */
-type PurgeCacheFn = (
-  params: PurgeCacheParams,
-) => ResultAsync<void, PurgeError>;
-
-type GetCacheHeadersParams = {
+export type GetCacheHeadersParams = {
   /**
    * The tags to generate CDN cache headers for.
    * This should be an array of strings representing the tags.
@@ -69,7 +83,9 @@ export type PurgeProvider = {
    * @param tags - The tags to purge.
    * @returns A neverthrow `ResultAsync` that resolves to void on success, or rejects with a `PurgeError`.
    */
-  purgeCache: PurgeCacheFn;
+  purgeCache: (
+    params: PurgeCacheParams,
+  ) => ResultAsync<void, PurgeError>;
   /**
    * Generate CDN specific headers based on tags.
    * @returns An object containing the headers, where keys are header names and values are header values.
@@ -93,14 +109,16 @@ export type PurgeClientConfig = Omit<GetCacheHeadersParams, "tags"> & {
 /**
  * CDN agnostic client for generating CDN cache control headers and purging tags.
  */
-type PurgeClient = {
+export type PurgeClient = {
   /**
    * Purge the specified tags from the CDN.
    * @param params - The parameters for purging the cache.
    * @returns A neverthrow `ResultAsync` that resolves to void on success, or rejects with a `PurgeError`.
    */
-  purgeCache: PurgeCacheFn;
-  
+  purgeCache: (
+    params: PurgeCacheParams,
+  ) => ResultAsync<void, PurgeError>;
+
   /**
    * Get the cache headers for the specified tags.
    * This will generate the appropriate headers based on the configuration and tags.
@@ -127,8 +145,8 @@ export function createPurge(config: PurgeClientConfig): PurgeClient {
       return {
         ...buildCommonHeaders({
           ...defaultConfig,
-          ...config, 
-          ...params
+          ...config,
+          ...params,
         }),
         ...providerHeaders,
       };
@@ -142,20 +160,23 @@ export function createPurge(config: PurgeClientConfig): PurgeClient {
  * based on the specified max ages and vary headers.
  * @returns An object containing the constructed headers.
  */
-function buildCommonHeaders(
-  params: Omit<GetCacheHeadersParams, "tags"> 
-) {
+export function buildCommonHeaders(
+  params: Omit<GetCacheHeadersParams, "tags">,
+): Record<string, string> {
   const headers: Record<string, string> = {};
 
   headers["Cache-Control"] = [
-    (params.maxAgeCDN && !params.private) && `s-maxage=${params.maxAgeCDN || 0}`,
+    (params.maxAgeCDN && !params.private) &&
+    `s-maxage=${params.maxAgeCDN || 0}`,
     params.maxAgeBrowser && `max-age=${params.maxAgeBrowser || 0}`,
     "must-revalidate",
     params.private ? "private" : "public",
   ].filter(Boolean).join(", ");
 
   if (params.vary) {
-    const varyHeaders = Array.isArray(params.vary) ? params.vary : [params.vary];
+    const varyHeaders = Array.isArray(params.vary)
+      ? params.vary
+      : [params.vary];
     headers["Vary"] = varyHeaders.join(", ");
   }
 
