@@ -23,6 +23,9 @@
 import type { ResultAsync } from "neverthrow";
 import type { PurgeError } from "./errors.ts";
 
+/**
+ * Parameters passed to the `purgeCache` method of the `PurgeProvider`.
+ */
 export type PurgeCacheParams = {
   /**
    * The tags to purge from the CDN.
@@ -31,6 +34,10 @@ export type PurgeCacheParams = {
   tags: string[];
 };
 
+/**
+ * Parameters for generating CDN cache headers.
+ * This includes the tags to generate headers for, and various caching options.
+ */
 export type GetCacheHeadersParams = {
   /**
    * The tags to generate CDN cache headers for.
@@ -135,6 +142,11 @@ const defaultConfig: Omit<GetCacheHeadersParams, "tags"> = {
   private: false,
 };
 
+/**
+ * Creates a new PurgeClient instance.
+ * @param config - The configuration for the PurgeClient.
+ * @returns A new PurgeClient instance.
+ */
 export function createPurge(config: PurgeClientConfig): PurgeClient {
   return {
     purgeCache: (params) => {
