@@ -1,6 +1,3 @@
-import type { ResultAsync } from "neverthrow";
-import type { PurgeError } from "./errors.ts";
-
 /**
  * This module provides a CDN agnostic client for purging cache tags and generating CDN specific cache control headers.
  *
@@ -22,6 +19,9 @@ import type { PurgeError } from "./errors.ts";
  * 
  * @module
  */
+
+import type { ResultAsync } from "neverthrow";
+import type { PurgeError } from "./errors.ts";
 
 export type PurgeCacheParams = {
   /**
