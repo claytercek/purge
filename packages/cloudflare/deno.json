@@ -1,12 +1,12 @@
 {
-  "name": "@purge/core",
-  "version": "0.1.4",
+  "name": "@purge/cloudflare",
+  "version": "0.1.0",
   "license": "GPL-3.0-or-later",
   "exports": {
-    ".": "./mod.ts",
-    "./errors": "./errors.ts"
+    ".": "./mod.ts"
   },
   "imports": {
+    "cloudflare": "npm:cloudflare@^4.4.1",
     "neverthrow": "npm:neverthrow@^8.2.0"
   }
 }

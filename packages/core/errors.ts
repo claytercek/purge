@@ -8,7 +8,7 @@
 /**
  * Base parameters for purge-related errors.
  */
-export type BaseErrorParams = {
+export type BaseErrorArgs = {
   message?: string;
   cause?: Error | null;
 };
@@ -20,7 +20,7 @@ export type BaseErrorParams = {
 export abstract class BasePurgeError<T extends string> extends Error {
   readonly _tag: T;
 
-  constructor(tag: T, args: BaseErrorParams) {
+  constructor(tag: T, args: BaseErrorArgs) {
     super(args.message);
     if (args.cause) {
       this.cause = args.cause;
@@ -31,39 +31,28 @@ export abstract class BasePurgeError<T extends string> extends Error {
 }
 
 /**
- * Error thrown when there is an issue with a fetch operation during purging.
- */
-export class PurgeFetchError extends BasePurgeError<"PurgeFetchError"> {
-  url?: string;
-
-  constructor(args: { message: string; url?: string }) {
-    super("PurgeFetchError", args);
-    this.url = args.url;
-  }
-}
-
-/**
- * Error thrown when there is an issue decoding a response during purging.
- */
-export class PurgeDecodeError extends BasePurgeError<"PurgeDecodeError"> {
-  constructor(args: { message: string }) {
-    super("PurgeDecodeError", args);
-  }
-}
-
-/**
  * Error thrown when there is an issue with the arguments provided to a purge operation.
  */
 export class PurgeArgumentError extends BasePurgeError<"PurgeArgumentError"> {
-  constructor(args: { message: string }) {
+  constructor(args: BaseErrorArgs) {
     super("PurgeArgumentError", args);
   }
 }
 
 /**
+ * Error thrown when there is an issue with the purge provider.
+ * This could be due to a failure in the provider's API or an issue with the provider's configuration.
+ */
+export class PurgeProviderError extends BasePurgeError<"PurgeProviderError"> {
+  constructor(args: BaseErrorArgs) {
+    super("PurgeProviderError", args);
+  }
+}
+
+
+/**
  * Error type for all purge-related errors.
  */
 export type PurgeError =
-  | PurgeFetchError
-  | PurgeDecodeError
+  | PurgeProviderError
   | PurgeArgumentError;

@@ -5,18 +5,18 @@
  * ```ts
  * import { createPurge } from "@purge/core";
  * import { MyCDNProvider } from "@purge/my-cdn";
- * 
+ *
  * const purgeClient = createPurge({
  *  provider: new MyCDNProvider()
  * });
- * 
+ *
  * // Purge cache tags
  * await purgeClient.purgeCache({ tags: ["tag1", "tag2"] });
- * 
+ *
  * // Get cache headers for tags
  * const headers = purgeClient.getCacheHeaders({ tags: ["tag1", "tag2"] });
  * ```
- * 
+ *
  * @module
  */
 
