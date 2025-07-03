@@ -1,5 +1,5 @@
 /**
- * This module provides a Cloudflare provider for the `@purge/core` package, 
+ * This module exports a Cloudflare provider for the `@purge/core` package, 
  * providing a simple interface to purge cache using Cloudflare's API.
  * It's a fairly simple wrapper around the Cloudflare TS SDK.
  *

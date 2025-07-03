@@ -1,0 +1,19 @@
+{
+  "name": "@purge/astro",
+  "version": "0.1.0",
+  "license": "GPL-3.0-or-later",
+  "exports": {
+    ".": "./mod.ts",
+    "./middleware": "./middleware.ts",
+    "./client": "./client.d.ts"
+  },
+  "imports": {
+    "astro": "npm:astro@^5.11.0",
+    "neverthrow": "npm:neverthrow@^8.2.0"
+  },
+  "compilerOptions": {
+    "types": [
+      "./types.d.ts"
+    ]
+  }
+}
